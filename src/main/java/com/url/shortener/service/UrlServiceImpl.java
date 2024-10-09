@@ -4,7 +4,9 @@ import com.url.shortener.dto.CreateShortUrlDto;
 import com.url.shortener.entity.Url;
 import com.url.shortener.repository.UrlRepository;
 import com.url.shortener.transfomer.UrlTransformer;
+import org.springframework.stereotype.Service;
 
+@Service
 public class UrlServiceImpl implements IUrlService{
     private final UrlRepository repository;
     private final UrlTransformer transformer;
