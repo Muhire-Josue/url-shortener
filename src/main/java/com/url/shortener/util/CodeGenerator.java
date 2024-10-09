@@ -1,11 +1,13 @@
 package com.url.shortener.util;
 
 import com.url.shortener.repository.UrlRepository;
+import org.springframework.stereotype.Component;
 
 import java.util.Random;
 
+@Component
 public class CodeGenerator {
-    private static final String ALPHANUMERIC = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+    private static final String ALPHANUMERIC = "abcdefghijklmnopqrstuvwxyz0123456789";
     private static final int SHORT_URL_LENGTH = 6;
     private final Random random = new Random();
     private final UrlRepository urlRepository;
