@@ -1,11 +1,13 @@
 package com.url.shortener.controller;
 
 import com.url.shortener.dto.CreateShortUrlDto;
+import com.url.shortener.dto.ShortUrlResponseDto;
 import com.url.shortener.entity.Url;
 import com.url.shortener.service.IUrlService;
 import com.url.shortener.transfomer.UrlTransformer;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -14,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.validation.annotation.Validated;
 
 @RestController
-@RequestMapping(path = "/api/v1")
+@RequestMapping(path = "/api/v1", produces = {MediaType.APPLICATION_JSON_VALUE})
 @Validated
 public class UrlController {
 
@@ -27,9 +29,10 @@ public class UrlController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<CreateShortUrlDto> createUrl(@Valid @RequestBody CreateShortUrlDto formData) {
+    public ResponseEntity<ShortUrlResponseDto> createUrl(@Valid @RequestBody CreateShortUrlDto formData) {
         Url url = transformer.mapDtoToEntity(formData);
         CreateShortUrlDto createdUrl = service.createShortUrl(url);
-        return new ResponseEntity<>(createdUrl, HttpStatus.CREATED);
+        ShortUrlResponseDto responseDto = new ShortUrlResponseDto(createdUrl.getId(), createdUrl.getOriginalUrl(), "www.shortly.dev/" + createdUrl.getUrlId());
+        return new ResponseEntity<>(responseDto, HttpStatus.CREATED);
     }
 }
