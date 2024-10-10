@@ -7,6 +7,8 @@ import com.url.shortener.transfomer.UrlTransformer;
 import com.url.shortener.util.CodeGenerator;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 public class UrlServiceImpl implements IUrlService{
     private final UrlRepository repository;
@@ -24,6 +26,10 @@ public class UrlServiceImpl implements IUrlService{
         if (url.getUrlId() == null) {
             String shortUrl = codeGenerator.generateUniqueShortUrl();
             url.setUrlId(shortUrl);
+        }
+        Optional<Url> foundUrl = repository.findByUrlId(url.getUrlId());
+        if (foundUrl.isPresent()){
+
         }
         Url savedUrl = repository.save(url);
         return transformer.mapEntityToDto(savedUrl);

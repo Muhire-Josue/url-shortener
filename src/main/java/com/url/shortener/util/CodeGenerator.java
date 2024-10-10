@@ -21,7 +21,7 @@ public class CodeGenerator {
         String urlId;
         do {
             urlId = generateRandomAlphanumeric(SHORT_URL_LENGTH);
-        } while (urlRepository.existsByUrlId(urlId)); // Ensure uniqueness
+        } while (urlRepository.findByUrlId(urlId).isPresent()); // Ensure uniqueness
         return urlId;
     }
 
