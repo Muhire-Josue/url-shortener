@@ -7,7 +7,7 @@ import java.util.Random;
 
 @Component
 public class CodeGenerator {
-    private static final String ALPHANUMERIC = "abcdefghijklmnopqrstuvwxyz0123456789";
+    private static final String ALPHANUMERIC = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
     private static final int SHORT_URL_LENGTH = 6;
     private final Random random = new Random();
     private final UrlRepository urlRepository;
@@ -18,11 +18,11 @@ public class CodeGenerator {
 
     // Generate a unique alphanumeric ID
     public String generateUniqueShortUrl() {
-        String shortUrl;
+        String urlId;
         do {
-            shortUrl = generateRandomAlphanumeric(SHORT_URL_LENGTH);
-        } while (urlRepository.existsByShortUrl(shortUrl)); // Ensure uniqueness
-        return shortUrl;
+            urlId = generateRandomAlphanumeric(SHORT_URL_LENGTH);
+        } while (urlRepository.existsByUrlId(urlId)); // Ensure uniqueness
+        return urlId;
     }
 
     // Generate random alphanumeric string

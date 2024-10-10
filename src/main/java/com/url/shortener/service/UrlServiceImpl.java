@@ -21,7 +21,7 @@ public class UrlServiceImpl implements IUrlService{
 
     @Override
     public CreateShortUrlDto createShortUrl(Url url) {
-        if (url.getUrlId() != null) {
+        if (url.getUrlId() == null) {
             String shortUrl = codeGenerator.generateUniqueShortUrl();
             url.setUrlId(shortUrl);
         }
