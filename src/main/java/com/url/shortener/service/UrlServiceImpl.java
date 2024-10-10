@@ -21,8 +21,10 @@ public class UrlServiceImpl implements IUrlService{
 
     @Override
     public CreateShortUrlDto createShortUrl(Url url) {
-        String shortUrl = "shortly.dev/" + codeGenerator.generateUniqueShortUrl();
-        url.setShortUrl(shortUrl);
+        if (url.getUrlId() != null) {
+            String shortUrl = codeGenerator.generateUniqueShortUrl();
+            url.setUrlId(shortUrl);
+        }
         Url savedUrl = repository.save(url);
         return transformer.mapEntityToDto(savedUrl);
     }

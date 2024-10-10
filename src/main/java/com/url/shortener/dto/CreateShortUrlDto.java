@@ -12,6 +12,6 @@ import lombok.Setter;
 public class CreateShortUrlDto {
     private Long id;
     private String originalUrl;
-    private String shortUrl;
+    private String urlId;
 
 }

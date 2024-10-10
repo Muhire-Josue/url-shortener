@@ -12,8 +12,9 @@ public class UrlTransformer {
     public Url mapDtoToEntity(CreateShortUrlDto dto){
         Url entity = new Url();
         entity.setOriginalUrl(dto.getOriginalUrl());
-        entity.setShortUrl(dto.getShortUrl());
-        entity.setCreatedDate(LocalDate.now());
+        entity.setUrlId(dto.getUrlId());
+        entity.setCreatedAt(LocalDate.now());
+        entity.setUpdatedAt(LocalDate.now());
 
         return entity;
     }
@@ -22,7 +23,7 @@ public class UrlTransformer {
         CreateShortUrlDto dto = new CreateShortUrlDto();
         dto.setId(entity.getId());
         dto.setOriginalUrl(entity.getOriginalUrl());
-        dto.setShortUrl(entity.getShortUrl());
+        dto.setUrlId(entity.getUrlId());
 
         return dto;
     }
