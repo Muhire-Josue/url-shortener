@@ -2,6 +2,7 @@ package com.url.shortener.service;
 
 import com.url.shortener.dto.CreateShortUrlDto;
 import com.url.shortener.entity.Url;
+import com.url.shortener.exception.DataConflictException;
 import com.url.shortener.repository.UrlRepository;
 import com.url.shortener.transfomer.UrlTransformer;
 import com.url.shortener.util.CodeGenerator;
@@ -26,11 +27,13 @@ public class UrlServiceImpl implements IUrlService{
         if (url.getUrlId() == null) {
             String shortUrl = codeGenerator.generateUniqueShortUrl();
             url.setUrlId(shortUrl);
+        } else {
+            Optional<Url> foundUrl = repository.findByUrlId(url.getUrlId());
+            if (foundUrl.isPresent()){
+                throw new DataConflictException("URL ID Already exist.");
+            }
         }
-        Optional<Url> foundUrl = repository.findByUrlId(url.getUrlId());
-        if (foundUrl.isPresent()){
 
-        }
         Url savedUrl = repository.save(url);
         return transformer.mapEntityToDto(savedUrl);
     }
