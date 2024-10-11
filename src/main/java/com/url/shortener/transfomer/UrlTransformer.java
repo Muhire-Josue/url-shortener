@@ -32,6 +32,7 @@ public class UrlTransformer {
         CreateShortUrlDto dto = new CreateShortUrlDto();
         dto.setId(entity.getId());
         dto.setOriginalUrl(entity.getOriginalUrl());
+        dto.setShortUrl(entity.getShortUrl());
         dto.setUrlId(entity.getUrlId());
         dto.setTtl(entity.getExpirationDate() != null ?
                 (long) entity.getExpirationDate().getSecond() : null);
