@@ -4,6 +4,7 @@ import com.url.shortener.dto.CreateShortUrlDto;
 import com.url.shortener.entity.Url;
 import org.springframework.stereotype.Component;
 
+import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
@@ -34,8 +35,7 @@ public class UrlTransformer {
         dto.setOriginalUrl(entity.getOriginalUrl());
         dto.setShortUrl(entity.getShortUrl());
         dto.setUrlId(entity.getUrlId());
-        dto.setTtl(entity.getExpirationDate() != null ?
-                (long) entity.getExpirationDate().getSecond() : null);
+        dto.setTtl(Duration.between(LocalDateTime.now(), entity.getExpirationDate()).getSeconds());
 
         return dto;
     }
