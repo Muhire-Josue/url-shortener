@@ -27,6 +27,7 @@ public class UrlServiceImpl implements IUrlService{
         if (url.getUrlId() == null) {
             String shortUrl = codeGenerator.generateUniqueShortUrl();
             url.setUrlId(shortUrl);
+            url.setShortUrl("www.shortly.dev/" + shortUrl);
         } else {
             Optional<Url> foundUrl = repository.findByUrlId(url.getUrlId());
             if (foundUrl.isPresent()){

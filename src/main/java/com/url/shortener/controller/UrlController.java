@@ -32,7 +32,10 @@ public class UrlController {
     public ResponseEntity<ShortUrlResponseDto> createUrl(@Valid @RequestBody CreateShortUrlDto formData) {
         Url url = transformer.mapDtoToEntity(formData);
         CreateShortUrlDto createdUrl = service.createShortUrl(url);
-        ShortUrlResponseDto responseDto = new ShortUrlResponseDto(createdUrl.getId(), createdUrl.getOriginalUrl(), "www.shortly.dev/" + createdUrl.getUrlId());
+        ShortUrlResponseDto responseDto = new ShortUrlResponseDto(createdUrl.getId(),
+                createdUrl.getOriginalUrl(),
+                createdUrl.getShortUrl(),
+                createdUrl.getTtl());
         return new ResponseEntity<>(responseDto, HttpStatus.CREATED);
     }
 }

@@ -8,5 +8,6 @@ import lombok.Getter;
 public class ShortUrlResponseDto {
     private Long id;
     private String originalUrl;
-    private String shortenedUrl;
+    private String shortUrl;
+    private Long ttl;
 }

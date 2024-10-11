@@ -19,6 +19,9 @@ public class Url {
     @Column(name = "original_url", nullable = false)
     private String originalUrl;
 
+    @Column(name = "short_url", nullable = false)
+    private String shortUrl;
+
     @Column(name = "url_id", nullable = false)
     private String urlId;
 
