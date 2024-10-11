@@ -32,9 +32,11 @@ public class UrlServiceImpl implements IUrlService{
             if (foundUrl.isPresent()){
                 throw new DataConflictException("URL ID Already exist.");
             }
-        }
 
+        }
+        url.setShortUrl("www.shortly.dev/" + url.getUrlId());
         Url savedUrl = repository.save(url);
         return transformer.mapEntityToDto(savedUrl);
+//        return null;
     }
 }

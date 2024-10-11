@@ -1,5 +1,6 @@
 package com.url.shortener.dto;
 
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
@@ -14,8 +15,15 @@ public class CreateShortUrlDto {
     @Pattern(regexp = "^(https?:\\/\\/)?(www\\.)?[a-zA-Z0-9\\-]+\\.[a-zA-Z]{2,}(\\/.*)?$",
             message = "Invalid URL format. Must be a valid http or https URL.")
     private String originalUrl;
+
+    private String shortUrl;
+
     @Size(min = 6, max = 6, message = "URL ID must be exactly 6 characters long.")
     @Pattern(regexp = "^[a-zA-Z0-9]+$", message = "URL ID must be alphanumeric.")
     private String urlId;
+
+    // TTL in seconds (optional, must be at least 1 second if provided)
+    @Min(1)
+    private Long ttl; // TTL in seconds
 
 }
