@@ -1,6 +1,7 @@
 package com.url.shortener.scheduler;
 
 import com.url.shortener.repository.UrlRepository;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
@@ -16,9 +17,9 @@ public class UrlCleanupScheduler {
     }
 
     // Run every minute to clean up expired URLs
-    @Scheduled(fixedRate = 60000) // Every 60 seconds
+    @Scheduled(fixedRateString = "${scheduler.cleanup-interval-ms}") // Use fixedRateString for dynamic values
     public void cleanUpExpiredUrls() {
-        LocalDateTime now = LocalDateTime.now();
-        urlRepository.deleteByExpirationDateBefore(now);
+        System.out.println("THE SCHEDULER IS NOW RUNNING");
+        urlRepository.deleteByExpirationDateBefore(LocalDateTime.now());
     }
 }
