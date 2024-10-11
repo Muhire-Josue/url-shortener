@@ -16,4 +16,8 @@ public interface UrlRepository extends JpaRepository<Url, Long> {
     @Modifying
     @Transactional
     void deleteByExpirationDateBefore(LocalDateTime now); // Deletes expired URLs
+
+    @Modifying
+    @Transactional
+    void deleteByUrlId(String urlId);
 }

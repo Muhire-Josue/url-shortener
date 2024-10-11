@@ -48,4 +48,11 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         ErrorResponseDto errorResponseDto = new ErrorResponseDto(409, ex.getMessage());
         return new ResponseEntity<>(errorResponseDto, HttpStatus.CONFLICT);
     }
+
+    // Handle Resource not found
+    @ExceptionHandler(ResourceNotFoundException.class)
+    public ResponseEntity<ErrorResponseDto> handleResourceNotFound(ResourceNotFoundException ex) {
+        ErrorResponseDto errorResponseDto = new ErrorResponseDto(404, ex.getMessage());
+        return new ResponseEntity<>(errorResponseDto, HttpStatus.NOT_FOUND);
+    }
 }
