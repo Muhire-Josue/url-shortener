@@ -10,4 +10,5 @@ public class ShortUrlResponseDto {
     private String originalUrl;
     private String shortUrl;
     private Long ttl;
+    private String urlId;
 }

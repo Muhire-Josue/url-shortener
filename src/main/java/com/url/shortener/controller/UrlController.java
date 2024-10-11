@@ -35,7 +35,8 @@ public class UrlController {
         ShortUrlResponseDto responseDto = new ShortUrlResponseDto(createdUrl.getId(),
                 createdUrl.getOriginalUrl(),
                 createdUrl.getShortUrl(),
-                createdUrl.getTtl());
+                createdUrl.getTtl(),
+                createdUrl.getUrlId());
         return new ResponseEntity<>(responseDto, HttpStatus.CREATED);
     }
 }
