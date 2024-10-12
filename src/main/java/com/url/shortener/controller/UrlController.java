@@ -10,18 +10,18 @@ import com.url.shortener.service.IUrlService;
 import com.url.shortener.transfomer.UrlTransformer;
 import com.url.shortener.validator.UrlIdValidator;
 import jakarta.validation.Valid;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.servlet.view.RedirectView;
 
 import java.util.Optional;
 
 @RestController
 @RequestMapping(path = "/api/v1", produces = {MediaType.APPLICATION_JSON_VALUE})
-@Validated
+@Slf4j
 public class UrlController {
 
     private final IUrlService service;
@@ -41,7 +41,6 @@ public class UrlController {
         CreateShortUrlDto createdUrl = service.createShortUrl(url);
         CreateShortUrlResponseDto responseDto = new CreateShortUrlResponseDto(createdUrl.getId(),
                 createdUrl.getOriginalUrl(),
-                createdUrl.getShortUrl(),
                 createdUrl.getTtl(),
                 createdUrl.getUrlId());
         return new ResponseEntity<>(responseDto, HttpStatus.CREATED);
@@ -53,6 +52,7 @@ public class UrlController {
         Optional<Url> foundUrl = repository.findByUrlId(urlId);
 
         if (foundUrl.isEmpty()) {
+            log.warn("URL with ID {} not found.", urlId);
             throw new ResourceNotFoundException("URL with ID " + urlId + " not found.");
         }
 
@@ -68,6 +68,7 @@ public class UrlController {
         Optional<Url> foundUrl = repository.findByUrlId(urlId);
 
         if (foundUrl.isEmpty()) {
+            log.warn("URL with ID {} not found for deletion.", urlId);
             throw new ResourceNotFoundException("URL with ID " + urlId + " not found.");
         }
 
