@@ -8,6 +8,7 @@ import com.url.shortener.exception.ResourceNotFoundException;
 import com.url.shortener.repository.UrlRepository;
 import com.url.shortener.service.IUrlService;
 import com.url.shortener.transfomer.UrlTransformer;
+import com.url.shortener.validator.UrlIdValidator;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -47,11 +48,16 @@ public class UrlController {
 
     @DeleteMapping("/delete/{urlId}")
     public ResponseEntity<DeleteShortUrlResponseDto> deleteUrl(@PathVariable String urlId){
+        // Validate the URL ID
+        UrlIdValidator.validateUrlId(urlId);
+
         Optional<Url> foundUrl = repository.findByUrlId(urlId);
-        if (foundUrl.isEmpty()){
-            throw new ResourceNotFoundException("Url can not be deleted because it does not exist");
+
+        if (foundUrl.isEmpty()) {
+            throw new ResourceNotFoundException("URL with ID " + urlId + " not found.");
         }
-            repository.deleteByUrlId(urlId);
-            return new ResponseEntity<>(new DeleteShortUrlResponseDto("URL deleted successfully."), HttpStatus.OK);
+
+        repository.deleteByUrlId(urlId);
+        return new ResponseEntity<>(new DeleteShortUrlResponseDto("URL deleted successfully."), HttpStatus.OK);
     }
 }
