@@ -32,6 +32,7 @@ public class UrlServiceImpl implements IUrlService{
         } else {
             Optional<Url> foundUrl = repository.findByUrlId(url.getUrlId());
             if (foundUrl.isPresent()){
+                log.warn("URL ID: {} Already exist.", foundUrl.get().getUrlId());
                 throw new DataConflictException("URL ID Already exist.");
             }
 
