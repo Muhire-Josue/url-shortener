@@ -52,6 +52,6 @@ public class UrlController {
             throw new ResourceNotFoundException("Url can not be deleted because it does not exist");
         }
             repository.deleteByUrlId(urlId);
-            return new ResponseEntity<>(new DeleteShortUrlResponseDto("RUL deleted successfully."), HttpStatus.NO_CONTENT);
+            return new ResponseEntity<>(new DeleteShortUrlResponseDto("URL deleted successfully."), HttpStatus.OK);
     }
 }
