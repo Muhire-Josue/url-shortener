@@ -34,7 +34,6 @@ public class UrlServiceImpl implements IUrlService{
             }
 
         }
-        url.setShortUrl("www.shortly.dev/" + url.getUrlId());
         Url savedUrl = repository.save(url);
         return transformer.mapEntityToDto(savedUrl);
 //        return null;

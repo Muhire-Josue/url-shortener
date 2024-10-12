@@ -16,8 +16,6 @@ public class CreateShortUrlDto {
             message = "Invalid URL format. Must be a valid http or https URL.")
     private String originalUrl;
 
-    private String shortUrl;
-
     @Size(min = 6, max = 6, message = "URL ID must be exactly 6 characters long.")
     @Pattern(regexp = "^[a-zA-Z0-9]+$", message = "URL ID must be alphanumeric.")
     private String urlId;

@@ -15,6 +15,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.servlet.view.RedirectView;
 
 import java.util.Optional;
 
@@ -44,6 +45,19 @@ public class UrlController {
                 createdUrl.getTtl(),
                 createdUrl.getUrlId());
         return new ResponseEntity<>(responseDto, HttpStatus.CREATED);
+    }
+
+    @GetMapping("/{urlId}")
+    public RedirectView redirectToOriginalUrl(@PathVariable String urlId) {
+
+        Optional<Url> foundUrl = repository.findByUrlId(urlId);
+
+        if (foundUrl.isEmpty()) {
+            throw new ResourceNotFoundException("URL with ID " + urlId + " not found.");
+        }
+
+        // Redirect to the original URL
+        return new RedirectView(foundUrl.get().getOriginalUrl());
     }
 
     @DeleteMapping("/delete/{urlId}")

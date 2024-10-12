@@ -33,7 +33,6 @@ public class UrlTransformer {
         CreateShortUrlDto dto = new CreateShortUrlDto();
         dto.setId(entity.getId());
         dto.setOriginalUrl(entity.getOriginalUrl());
-        dto.setShortUrl(entity.getShortUrl());
         dto.setUrlId(entity.getUrlId());
 
         // Handle TTL calculation
