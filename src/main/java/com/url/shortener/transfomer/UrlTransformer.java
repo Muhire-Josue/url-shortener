@@ -35,8 +35,16 @@ public class UrlTransformer {
         dto.setOriginalUrl(entity.getOriginalUrl());
         dto.setShortUrl(entity.getShortUrl());
         dto.setUrlId(entity.getUrlId());
-        dto.setTtl(Duration.between(LocalDateTime.now(), entity.getExpirationDate()).getSeconds());
+
+        // Handle TTL calculation
+        if (entity.getExpirationDate() != null) {
+            long ttl = Duration.between(LocalDateTime.now(), entity.getExpirationDate()).getSeconds();
+            dto.setTtl(ttl > 0 ? ttl : 0); // Set to 0 if TTL is negative (expired)
+        } else {
+            dto.setTtl(null); // or 0 if you want TTL for indefinite URLs to be 0
+        }
 
         return dto;
     }
+
 }

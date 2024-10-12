@@ -1,6 +1,6 @@
 package com.url.shortener.exception;
 
-import com.url.shortener.dto.ErrorResponseDto;
+import com.url.shortener.dto.http.ErrorResponseDto;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
@@ -47,5 +47,19 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     public ResponseEntity<ErrorResponseDto> handleDataConflictException(DataConflictException ex) {
         ErrorResponseDto errorResponseDto = new ErrorResponseDto(409, ex.getMessage());
         return new ResponseEntity<>(errorResponseDto, HttpStatus.CONFLICT);
+    }
+
+    // Handle Resource not found
+    @ExceptionHandler(ResourceNotFoundException.class)
+    public ResponseEntity<ErrorResponseDto> handleResourceNotFound(ResourceNotFoundException ex) {
+        ErrorResponseDto errorResponseDto = new ErrorResponseDto(404, ex.getMessage());
+        return new ResponseEntity<>(errorResponseDto, HttpStatus.NOT_FOUND);
+    }
+
+    // Handle Resource not found
+    @ExceptionHandler(BadRequestException.class)
+    public ResponseEntity<ErrorResponseDto> handleBadRequest(BadRequestException ex) {
+        ErrorResponseDto errorResponseDto = new ErrorResponseDto(400, ex.getMessage());
+        return new ResponseEntity<>(errorResponseDto, HttpStatus.BAD_REQUEST);
     }
 }
