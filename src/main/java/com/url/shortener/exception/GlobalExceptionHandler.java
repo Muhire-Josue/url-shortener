@@ -1,6 +1,6 @@
 package com.url.shortener.exception;
 
-import com.url.shortener.dto.ErrorResponseDto;
+import com.url.shortener.dto.http.ErrorResponseDto;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;

@@ -1,8 +1,8 @@
 package com.url.shortener.controller;
 
 import com.url.shortener.dto.CreateShortUrlDto;
-import com.url.shortener.dto.DeleteShortUrlDto;
-import com.url.shortener.dto.ShortUrlResponseDto;
+import com.url.shortener.dto.http.CreateShortUrlResponseDto;
+import com.url.shortener.dto.http.DeleteShortUrlResponseDto;
 import com.url.shortener.entity.Url;
 import com.url.shortener.exception.ResourceNotFoundException;
 import com.url.shortener.repository.UrlRepository;
@@ -34,10 +34,10 @@ public class UrlController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<ShortUrlResponseDto> createUrl(@Valid @RequestBody CreateShortUrlDto formData) {
+    public ResponseEntity<CreateShortUrlResponseDto> createUrl(@Valid @RequestBody CreateShortUrlDto formData) {
         Url url = transformer.mapDtoToEntity(formData);
         CreateShortUrlDto createdUrl = service.createShortUrl(url);
-        ShortUrlResponseDto responseDto = new ShortUrlResponseDto(createdUrl.getId(),
+        CreateShortUrlResponseDto responseDto = new CreateShortUrlResponseDto(createdUrl.getId(),
                 createdUrl.getOriginalUrl(),
                 createdUrl.getShortUrl(),
                 createdUrl.getTtl(),
@@ -46,12 +46,12 @@ public class UrlController {
     }
 
     @DeleteMapping("/delete/{urlId}")
-    public ResponseEntity<String> deleteUrl(@Valid @PathVariable String urlId){
+    public ResponseEntity<DeleteShortUrlResponseDto> deleteUrl(@PathVariable String urlId){
         Optional<Url> foundUrl = repository.findByUrlId(urlId);
         if (foundUrl.isEmpty()){
             throw new ResourceNotFoundException("Url can not be deleted because it does not exist");
         }
             repository.deleteByUrlId(urlId);
-            return new ResponseEntity<>("URL deleted successfully", HttpStatus.NO_CONTENT);
+            return new ResponseEntity<>(new DeleteShortUrlResponseDto("RUL deleted successfully."), HttpStatus.NO_CONTENT);
     }
 }
