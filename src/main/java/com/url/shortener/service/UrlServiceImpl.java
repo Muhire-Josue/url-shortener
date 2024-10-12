@@ -6,11 +6,13 @@ import com.url.shortener.exception.DataConflictException;
 import com.url.shortener.repository.UrlRepository;
 import com.url.shortener.transfomer.UrlTransformer;
 import com.url.shortener.util.CodeGenerator;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
 @Service
+@Slf4j
 public class UrlServiceImpl implements IUrlService{
     private final UrlRepository repository;
     private final UrlTransformer transformer;
