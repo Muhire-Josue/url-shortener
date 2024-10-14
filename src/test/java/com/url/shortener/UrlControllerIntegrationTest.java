@@ -40,7 +40,7 @@ public class UrlControllerIntegrationTest {
 
     @BeforeEach
     public void setup() {
-        // Clear the database before each test
+        // Clear the H2 database before each test
         urlRepository.deleteAll();
     }
     // Test: Create Short URL
@@ -57,5 +57,21 @@ public class UrlControllerIntegrationTest {
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.originalUrl").value("https://www.example.com"))
                 .andExpect(jsonPath("$.urlId").value("abc123"));
+    }
+
+    // Test: Redirect to the original URL using URL ID
+    @Test
+    public void shouldRedirectToOriginalUrl() throws Exception {
+        // Create a URL entity in the test H2 database
+        Url url = new Url();
+        url.setOriginalUrl("https://www.google.com");
+        url.setUrlId("xyz789");
+        url.setCreatedAt(LocalDate.now());
+        url.setUpdatedAt(LocalDate.now());
+        urlRepository.save(url);
+
+        mockMvc.perform(get("/api/v1/xyz789"))
+                .andExpect(status().is3xxRedirection()) // 3xx indicates a redirection
+                .andExpect(redirectedUrl("https://www.google.com"));
     }
 }
