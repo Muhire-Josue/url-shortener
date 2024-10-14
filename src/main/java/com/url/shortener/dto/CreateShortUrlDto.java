@@ -8,6 +8,7 @@ import jakarta.validation.constraints.Size;
 import lombok.*;
 
 @Data
+@Schema(description = "Data transfer object for creating a shortened URL")
 public class CreateShortUrlDto {
 
     private Long id;
