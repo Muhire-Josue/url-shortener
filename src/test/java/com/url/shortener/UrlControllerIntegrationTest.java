@@ -117,16 +117,16 @@ public class UrlControllerIntegrationTest {
     // Test: Delete URL by its ID
     @Test
     public void shouldDeleteUrl() throws Exception {
-        // Create a URL entity in the test H2 database
+        // Create a URL entity in the test H2 database with a valid 6-character urlId
         Url url = new Url();
         url.setOriginalUrl("https://www.reddit.com");
-        url.setUrlId("reddit1");
+        url.setUrlId("abc123");  // Ensure the urlId is exactly 6 alphanumeric characters
         url.setCreatedAt(LocalDate.now());
         url.setUpdatedAt(LocalDate.now());
         urlRepository.save(url);
 
         // Send delete request
-        MvcResult result = mockMvc.perform(delete("/api/v1/delete/reddit1"))
+        MvcResult result = mockMvc.perform(delete("/api/v1/delete/abc123"))
                 .andExpect(status().isOk())
                 .andReturn();
 
@@ -136,6 +136,7 @@ public class UrlControllerIntegrationTest {
         assertThat(response.getMessage()).isEqualTo("URL deleted successfully.");
 
         // Verify that the URL is deleted from the database
-        assertThat(urlRepository.findByUrlId("reddit1")).isEmpty();
+        assertThat(urlRepository.findByUrlId("abc123")).isEmpty();
     }
+
 }

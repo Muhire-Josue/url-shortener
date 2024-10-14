@@ -65,6 +65,7 @@ public class UrlController {
         // Validate the URL ID
         UrlIdValidator.validateUrlId(urlId);
 
+        System.out.println("HERER");
         Optional<Url> foundUrl = repository.findByUrlId(urlId);
 
         if (foundUrl.isEmpty()) {
