@@ -1,5 +1,6 @@
 package com.url.shortener.dto;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Pattern;
@@ -11,17 +12,19 @@ public class CreateShortUrlDto {
 
     private Long id;
 
-    @NotEmpty(message = "originalUrl address can not be a null or empty")
+    @NotEmpty(message = "Original URL cannot be empty")
     @Pattern(regexp = "^(https?:\\/\\/)?(www\\.)?[a-zA-Z0-9\\-]+\\.[a-zA-Z]{2,}(\\/.*)?$",
-            message = "Invalid URL format. Must be a valid http or https URL.")
+            message = "Invalid URL format.")
+    @Schema(description = "The original URL to be shortened", example = "https://www.example.com")
     private String originalUrl;
 
-    @Size(min = 6, max = 6, message = "URL ID must be exactly 6 characters long.")
+    @Size(min = 6, max = 6, message = "URL ID must be exactly 6 characters")
     @Pattern(regexp = "^[a-zA-Z0-9]+$", message = "URL ID must be alphanumeric.")
+    @Schema(description = "Custom URL ID for the shortened URL", example = "abc123", nullable = true)
     private String urlId;
 
-    // TTL in seconds (optional, must be at least 1 second if provided)
     @Min(1)
-    private Long ttl; // TTL in seconds
+    @Schema(description = "Time-to-live (TTL) in seconds for the shortened URL", example = "3600", nullable = true)
+    private Long ttl;
 
 }
