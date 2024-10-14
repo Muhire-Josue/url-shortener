@@ -155,5 +155,13 @@ public class UrlControllerIntegrationTest {
                 .andExpect(jsonPath("$.errorMessage").value("URL with ID abc134 not found."));
     }
 
+    // Test: Attempt to delete URL with an invalid urlId (expect 400 Bad Request)
+    @Test
+    public void shouldReturn400WhenDeletingWithInvalidUrlId() throws Exception {
+        // Try to delete a URL with an invalid urlId (e.g., "invalid1", which is more than 6 characters)
+        mockMvc.perform(delete("/api/v1/delete/invalid1"))
+                .andExpect(status().isBadRequest())  // Expect 400 Bad Request
+                .andExpect(jsonPath("$.errorMessage").value("URL ID must be exactly 6 alphanumeric characters."));  // Assuming this is the validation message in your application
+    }
 
 }
