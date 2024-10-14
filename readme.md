@@ -61,11 +61,6 @@ The tests are configured to use the in-memory H2 database, which is set up in th
 [Muhire Josué](https://github.com/Muhire-Josue)
 
 ```json
-{
-  "statusCode": 400,
-  "errorMessage": "URL ID must be exactly 6 alphanumeric characters."
-}
-
 src
  ├── main
  │    ├── java
