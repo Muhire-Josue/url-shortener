@@ -31,6 +31,9 @@ If using Docker, ensure that the PostgreSQL container is running.
 
 ```bash
 git clone https://github.com/your-username/url-shortener.git
+```
+
+```bash
 cd url-shortener
 ```
 
@@ -44,6 +47,9 @@ docker run --name pg-url-shortener -e POSTGRES_USER=admin -e POSTGRES_PASSWORD=r
 
 ```bash
 mvn clean install
+```
+
+```bash
 mvn spring-boot:run
 ```
 
