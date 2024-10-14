@@ -63,6 +63,12 @@ mvn test
 The tests are configured to use the in-memory H2 database, which is set up in the application-test.yml file.
 
 
+### How to Access swagger documentation:
+
+```bash
+http://localhost:8080/swagger-ui.html
+```
+
 ### Contributor
 [Muhire Josué](https://github.com/Muhire-Josue)
 
