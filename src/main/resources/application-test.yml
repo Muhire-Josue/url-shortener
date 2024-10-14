@@ -11,4 +11,4 @@ spring:
     show-sql: true           # Show SQL in logs during testing
 
   flyway:
-    enabled: false           # Disable Flyway for H2 testing
+    enabled: false  # Disable Flyway during tests
