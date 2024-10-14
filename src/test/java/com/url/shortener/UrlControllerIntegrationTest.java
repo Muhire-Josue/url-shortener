@@ -139,4 +139,21 @@ public class UrlControllerIntegrationTest {
         assertThat(urlRepository.findByUrlId("abc123")).isEmpty();
     }
 
+    // Test: URL not found for redirection
+    @Test
+    public void shouldReturn404WhenUrlNotFoundForRedirection() throws Exception {
+        mockMvc.perform(get("/api/v1/abc134"))
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.errorMessage").value("URL with ID abc134 not found."));
+    }
+
+    // Test: URL not found for deletion
+    @Test
+    public void shouldReturn404WhenUrlNotFoundForDeletion() throws Exception {
+        mockMvc.perform(delete("/api/v1/delete/abc134"))
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.errorMessage").value("URL with ID abc134 not found."));
+    }
+
+
 }
