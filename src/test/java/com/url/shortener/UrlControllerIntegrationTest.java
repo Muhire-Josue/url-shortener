@@ -43,20 +43,59 @@ public class UrlControllerIntegrationTest {
         // Clear the H2 database before each test
         urlRepository.deleteAll();
     }
-    // Test: Create Short URL
+    // Test: Create Short URL with user-provided urlId
     @Test
     public void shouldCreateShortUrl() throws Exception {
         CreateShortUrlDto createShortUrlDto = new CreateShortUrlDto();
         createShortUrlDto.setOriginalUrl("https://www.example.com");
-        createShortUrlDto.setUrlId("abc123");
-        createShortUrlDto.setTtl(3600L); // 1 hour TTL
+        createShortUrlDto.setUrlId("abc123");  // Provided by user
+        createShortUrlDto.setTtl(3600L);  // 1 hour TTL
 
         mockMvc.perform(post("/api/v1/create")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(createShortUrlDto)))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.originalUrl").value("https://www.example.com"))
-                .andExpect(jsonPath("$.urlId").value("abc123"));
+                .andExpect(jsonPath("$.urlId").value("abc123"));  // Verify provided urlId
+    }
+
+    // Test: Create Short URL without providing urlId (expect system-generated value)
+    @Test
+    public void shouldCreateShortUrlWithoutUserId() throws Exception {
+        CreateShortUrlDto createShortUrlDto = new CreateShortUrlDto();
+        createShortUrlDto.setOriginalUrl("https://www.example.com");
+        createShortUrlDto.setTtl(3600L);  // 1 hour TTL
+//        createShortUrlDto.setUrlId(null);  // urlId not provided by user
+
+        MvcResult result = mockMvc.perform(post("/api/v1/create")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(createShortUrlDto)))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.originalUrl").value("https://www.example.com"))
+                .andExpect(jsonPath("$.urlId").isString())  // Expect generated urlId to be a string
+                .andReturn();
+
+        // Extract generated urlId from the response and assert it's of expected length
+        String responseJson = result.getResponse().getContentAsString();
+        String generatedUrlId = objectMapper.readTree(responseJson).get("urlId").asText();
+        assertThat(generatedUrlId).hasSize(6);  // Assuming urlId length is 6
+    }
+
+    // Test: Create Short URL without providing ttl (expect ttl to be null or not present)
+    @Test
+    public void shouldCreateShortUrlWithoutTtl() throws Exception {
+        CreateShortUrlDto createShortUrlDto = new CreateShortUrlDto();
+        createShortUrlDto.setOriginalUrl("https://www.example.com");
+        createShortUrlDto.setUrlId("xyz789");  // Provided by user
+        createShortUrlDto.setTtl(null);  // TTL not provided
+
+        mockMvc.perform(post("/api/v1/create")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(createShortUrlDto)))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.originalUrl").value("https://www.example.com"))
+                .andExpect(jsonPath("$.urlId").value("xyz789"))  // Verify provided urlId
+                .andExpect(jsonPath("$.ttl").isEmpty());  // Expect TTL to be null or not present
     }
 
     // Test: Redirect to the original URL using URL ID
@@ -73,5 +112,30 @@ public class UrlControllerIntegrationTest {
         mockMvc.perform(get("/api/v1/xyz789"))
                 .andExpect(status().is3xxRedirection()) // 3xx indicates a redirection
                 .andExpect(redirectedUrl("https://www.google.com"));
+    }
+
+    // Test: Delete URL by its ID
+    @Test
+    public void shouldDeleteUrl() throws Exception {
+        // Create a URL entity in the test H2 database
+        Url url = new Url();
+        url.setOriginalUrl("https://www.reddit.com");
+        url.setUrlId("reddit1");
+        url.setCreatedAt(LocalDate.now());
+        url.setUpdatedAt(LocalDate.now());
+        urlRepository.save(url);
+
+        // Send delete request
+        MvcResult result = mockMvc.perform(delete("/api/v1/delete/reddit1"))
+                .andExpect(status().isOk())
+                .andReturn();
+
+        // Verify the response message
+        String responseJson = result.getResponse().getContentAsString();
+        DeleteShortUrlResponseDto response = objectMapper.readValue(responseJson, DeleteShortUrlResponseDto.class);
+        assertThat(response.getMessage()).isEqualTo("URL deleted successfully.");
+
+        // Verify that the URL is deleted from the database
+        assertThat(urlRepository.findByUrlId("reddit1")).isEmpty();
     }
 }
